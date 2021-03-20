@@ -108,7 +108,7 @@ $session = new classes\Session(StorekeeperFL);
                        
                     </div>
 
-                    <!-- supply items -->
+                
                     <div class="details">
                         <h2 style="margin-bottom: 8px;"> Supplied Items</h2>
                     <table class="tbl2 content-table">

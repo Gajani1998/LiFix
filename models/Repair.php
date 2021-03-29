@@ -1,33 +1,86 @@
 <?php
+
 namespace models;
+
 require_once "Database.php";
 
 class Repair extends Database
 {
 
-    public function createRepair( $status,$lp_id,$technician_id,$clerk_id)
+    public function getTotal_damageitems_forday($tech_id, $item_id)
     {
-        $date = date("yy-m-d");
+        $date = date("y-m-d");
 
-        $q = "INSERT INTO `repair`(`date`, `status`, `lp_id`, `technician_id`, `clerk_id`) VALUES 
-        ('$date', '$status','$lp_id', '$technician_id' , '$clerk_id' )";
-        
+        $q0 = "SELECT repair_id FROM repair WHERE technician_id='$tech_id' AND date='$date'";
+
+        $q = "SELECT SUM(quantity) as total FROM repair_inventory_asc WHERE repair_id IN ($q0) AND damage_used_flag=1 AND item_id=$item_id";
+
+        $result = $this->conn->query($q);
+        $result = $result->fetch_array();
+        return $result[0];
+    }
+
+    // public function createRepair( $status,$lp_id,$technician_id,$clerk_id)
+    // {
+    //     $date = date("yy-m-d");
+
+    //     $q = "INSERT INTO `repair`(`date`, `status`, `lp_id`, `technician_id`, `clerk_id`) VALUES 
+    //     ('$date', '$status','$lp_id', '$technician_id' , '$clerk_id' )";
+
+    //     $this->conn->query($q);
+    //     return $this->conn->insert_id;
+    // }
+
+    public function createRepair($status, $lp_id, $technician_id, $clerk_id, $complainer_id)
+    {
+        $date = date("y-m-d");
+
+        $q = "INSERT INTO `repair`(`date`, `status`, `lp_id`, `technician_id`, `clerk_id`, `complainer_id`) VALUES 
+        ('$date', '$status','$lp_id', '$technician_id' , '$clerk_id', '$complainer_id')";
+
         $this->conn->query($q);
         return $this->conn->insert_id;
     }
 
-    public function getRepairs($status)
+    public function getRepairHistory( $paginationfilter,$searchfilter)
     {
-        $q = "SELECT repair.repair_id, repair.lp_id, lamppost.division , repair.date 
-        FROM lamppost INNER JOIN repair 
-        ON lamppost.lp_id=repair.lp_id WHERE repair.status='$status' ORDER BY repair.date DESC " ;
-        if ($status== "ce") {
-            $q = "SELECT repair.repair_id, repair.lp_id, lamppost.division , repair.date 
-        FROM lamppost INNER JOIN repair 
-        ON lamppost.lp_id=repair.lp_id WHERE repair.status='c' OR repair.status='e' ORDER BY repair.date DESC " ;
+        $search_word = " WHERE division LIKE '%$searchfilter%' OR lp_id LIKE '%$searchfilter%' OR date LIKE '%$searchfilter%' ";
+        if ($searchfilter == '') {
+        
+            $q = "SELECT * FROM repair_history" . $paginationfilter;
+        }else{
+            
+            $q = "SELECT * FROM repair_history" . $search_word . $paginationfilter;
         }
+        
         $list =   $this->conn->query($q);
         return $list;
+    }
+
+    public function getRepairHistoryCount($searchfilter)
+    {
+        $search_word = " WHERE division LIKE '%$searchfilter%' OR lp_id LIKE '%$searchfilter%' OR date LIKE '%$searchfilter%' ";
+
+        if ($searchfilter == '') {
+        
+            $q = "SELECT COUNT(repair_id) AS count FROM repair_history " ;
+        }else{
+            
+            $q = "SELECT COUNT(repair_id) AS count FROM repair_history " . $search_word ;
+        }
+        
+        $count =   $this->conn->query($q);
+        $count =   $count->fetch_assoc();
+        return $count["count"];
+    }
+
+    public function getRepairsCountById($id)
+    {
+        $q = "SELECT COUNT(repair.repair_id) AS count
+        FROM repair 
+        WHERE repair.status='c' AND repair.technician_id = $id";
+        $count =   $this->conn->query($q);
+        return $count;
     }
 
 
@@ -35,7 +88,7 @@ class Repair extends Database
     {
         $q = "SELECT repair.repair_id, repair.lp_id, lamppost.division , repair.date 
         FROM lamppost INNER JOIN repair 
-        ON lamppost.lp_id=repair.lp_id WHERE repair.technician_id=0 AND repair.status='a' ORDER BY repair.date DESC " ;
+        ON lamppost.lp_id=repair.lp_id WHERE repair.technician_id=0 AND repair.status='a' ORDER BY repair.date DESC ";
 
         $list =   $this->conn->query($q);
         return $list;
@@ -45,7 +98,7 @@ class Repair extends Database
     {
         $q = "SELECT repair.repair_id, repair.lp_id, lamppost.division , repair.date 
         FROM lamppost INNER JOIN repair 
-        ON lamppost.lp_id=repair.lp_id WHERE repair.technician_id='$tech_id' ORDER BY repair.date DESC " ;
+        ON lamppost.lp_id=repair.lp_id WHERE repair.technician_id='$tech_id' AND repair.status='a' ORDER BY repair.date DESC ";
 
         $list =   $this->conn->query($q);
         return $list;
@@ -73,74 +126,54 @@ class Repair extends Database
         // echo $list;
         return $list->fetch_assoc();
     }
-    public function getRepairItemsByid($r_id,$used_damage_flag)
+    public function getRepairItemsByid($r_id, $used_damage_flag)
     {
         $q = "SELECT repair_inventory_asc.item_id, repair_inventory_asc.quantity, inventory.name
         FROM repair_inventory_asc INNER JOIN inventory
         ON repair_inventory_asc.item_id=inventory.Item_id 
         WHERE repair_inventory_asc.repair_id='$r_id' AND repair_inventory_asc.damage_used_flag = '$used_damage_flag' ";
-       
+
         $list =   $this->conn->query($q);
         // echo $list;
         return $list->fetch_all(MYSQLI_ASSOC);
     }
 
-    private function AddUsedReturnItem($r_id,$item_id,$quantity,$returnflag){
+    private function AddUsedReturnItem($r_id, $item_id, $quantity, $returnflag)
+    {
         $q = "INSERT INTO `repair_inventory_asc`( `repair_id`, `item_id`, `quantity`, `damage_used_flag`) VALUES 
         ('$r_id','$item_id' , '$quantity', '$returnflag')";
 
-       if( $this->conn->query($q) !== TRUE)
-            echo (' <h4 style="background-color: red;color: #fff;padding: 5px;border-radius: 5px;margin: 5px 0;">Process failed '.$this->conn->error .'</h4> ');
-       
+        if ($this->conn->query($q) !== TRUE)
+            die('<h4 style="background-color: red;color: #fff;padding: 5px;border-radius: 5px;margin: 5px 0; position: absolute;">Process failed - Invalid request</h4> ');
     }
 
-
-
-
-
-
-
-
-
-
-
-
-    public function CompleteRepair($r_id,$used_items,$return_items){
+    public function CompleteRepair($r_id, $used_items, $return_items)
+    {
         // add used items to database
-        foreach ($used_items as $item){
-            $this->AddUsedReturnItem($r_id, $item[0],$item[1],0);
+        foreach ($used_items as $item) {
+            $this->AddUsedReturnItem($r_id, $item[0], $item[1], 0);
         }
         // add return items to database
-        foreach ($return_items as $item){
-            $this->AddUsedReturnItem($r_id, $item[0],$item[1],1);
+        foreach ($return_items as $item) {
+            $this->AddUsedReturnItem($r_id, $item[0], $item[1], 1);
         }
         // chansge repair status as completed
-        $this->changeStatus($r_id,'c');
-
+        $this->changeStatus($r_id, 'c');
         
-       
     }
 
-    public function CreateEmergencyRepair($lp_id,$technician_id,$used_items,$return_items){
+    public function CreateEmergencyRepair($lp_id, $technician_id, $used_items, $return_items)
+    {
         // hence this is emgrepair status is e, clerkid is 0 (defalt one) because he did not assign that to technician
-        $r_id = $this->createRepair('e',$lp_id,$technician_id,0);
-        
+        $r_id = $this->createRepair('e', $lp_id, $technician_id, 0, 0);
+
         // add used items to database
-        foreach ($used_items as $item){
-            $this->AddUsedReturnItem($r_id, $item[0],$item[1],0);
+        foreach ($used_items as $item) {
+            $this->AddUsedReturnItem($r_id, $item[0], $item[1], 0);
         }
         // add return items to database
-        foreach ($return_items as $item){
-            $this->AddUsedReturnItem($r_id, $item[0],$item[1],1);
+        foreach ($return_items as $item) {
+            $this->AddUsedReturnItem($r_id, $item[0], $item[1], 1);
         }
-        
     }
-
-
-
-    
-
-
-
 }
-

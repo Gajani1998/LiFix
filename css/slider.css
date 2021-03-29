@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Josefin+Sans&display=swap');
+@import url("https://fonts.googleapis.com/css?family=Josefin+Sans&display=swap");
 
 * {
   margin: 0;
@@ -8,21 +8,23 @@
   text-decoration: none;
 }
 
-
 .sidebar {
+  z-index: 5;
   width: 50px;
   height: 100%;
   background: #214b55;
+  /* background: #474000ed; */
   padding: 30px 0px;
   position: fixed;
-  font-family: 'Josefin Sans', sans-serif;
+  font-family: "Josefin Sans", sans-serif;
 
   transition: all 0.2s;
 }
 
+/* 
 .sidebar:hover {
-  /* width: 200px; */
-}
+  width: 200px;
+} */
 
 .sidebar ul {
   display: flex;
@@ -33,7 +35,6 @@
 .sidebar ul .nav-logo {
   font-size: 40px;
   color: white;
-
 }
 
 .sidebar ul .nav-logo:hover {
@@ -65,6 +66,11 @@
 }
 
 .sidebar ul .nav-item .nav-link .fas {
+  width: 25px;
+  margin-right: 4px;
+}
+
+.sidebar ul .nav-item .nav-link .far {
   width: 25px;
   margin-right: 4px;
 }

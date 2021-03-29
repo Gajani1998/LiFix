@@ -47,4 +47,16 @@
 ## notification types
 #### c-lp  -> to clck when tech added lamp post
 #### c-supply  ->  to tech when st suplly items
+#### c-acc  ->  to admin when new account created
 #### norm  -> other notifictions
+
+
+
+
+## fraud types
+#### a  -> return item mismatch
+#### b  ->  bulb tick
+#### c  -> retru chck not done
+#### d  -> inventory mismatch
+
+

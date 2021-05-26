@@ -1,18 +1,21 @@
 <?php
 
-namespace classes;
+    use classes\Sms;
 
-include_once  __DIR__ . '/../utils/classloader.php';
+    require '../classes/Sms.php';
+    
+    $recipient = $_POST["phone"];
 
-$recipient = $_POST["phone"];
+    if($recipient) {
+        if (session_id() == ""){
+            session_start();
+        }
+        
+        // otp creates
+        $otp = rand(1000,9999);
+        $_SESSION["otp"] = "$otp";
 
-if ($recipient) {
-    if (session_id() == "") {
-        session_start();
+        // send the otp
+        $sms = new Sms($recipient);
+        $sms->sendOtp($otp);
     }
-
-    $otp = rand(1000, 9999);
-    $_SESSION["otp"] = "$otp";
-
-    Sms::sendOtp($recipient, $otp);
-}

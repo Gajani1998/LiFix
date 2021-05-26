@@ -10,7 +10,7 @@ $data =  $admin->SectionAssign();
 
 <head>
     <meta charset="utf-8" />
-    <title>Show drawn polygon area</title>
+    <title>Assign repair area</title>
     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
     <link rel="apple-touch-icon" sizes="180x180" href="../assets/favicon/apple-touch-icon.png">
 	<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon/favicon-32x32.png">
@@ -81,6 +81,7 @@ $data =  $admin->SectionAssign();
 
     <?php include "./views/nav.php" ?>
 
+    <?php  $admin->getSession()->showMessage() ?>
 
     <div class="main_content">
         <header>
@@ -143,7 +144,7 @@ $data =  $admin->SectionAssign();
             container: 'map',
             style: 'mapbox://styles/mapbox/streets-v11',
             center: [79.861489, 6.885039],
-            zoom: 14
+            zoom: 12
         });
 
 

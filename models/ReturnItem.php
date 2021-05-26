@@ -11,7 +11,7 @@ class ReturnItem extends Database
     {
         $date = date("y-m-d");
 
-        $q1 = " INSERT INTO returnitemcheck('tech_id', 'date') VALUES ( '$tech','$date' ) ";
+        $q1 = " INSERT INTO `returnitemcheck`(`tech_id`, `date`) VALUES ( '$tech','$date' ) ";
 
         $this->conn->query($q1);
     }

@@ -49,7 +49,7 @@ class User extends Database
 
     public function getUsers($type)
     {
-        $q = "SELECT `userId`, `Name` FROM `user` WHERE `occuFlag`='$type' ";
+        $q = "SELECT `userId`, `Name` FROM `user` WHERE `occuFlag`='$type' AND NOT statusFlag = 0 ";
         $list =   $this->conn->query($q);
         return $list;
     }
@@ -71,11 +71,11 @@ class User extends Database
         return $list['Name'];
     }
 
-    public function getUserDetails($name)
+    public function getUserDetails($id)
     {
-        $q = "SELECT `userId`, `Name`, `phone` FROM `user` WHERE Name='$name'";
+        $q = "SELECT `userId`,`username`, `Name`, `phone` FROM `user` WHERE userId='$id'";
         $list =   $this->conn->query($q);
-        return $list;
+        return $list->fetch_assoc();
     }
 
 

@@ -35,32 +35,6 @@ class Clerck extends Framework
 
         return $data;
     }
-    public function SectionAssign()
-    {
-
-        $usermodel = new \models\User();
-        $technicians = $usermodel->getUsers(TechnicianFL);
-        $data['technicians'] = $technicians;
-
-        $mapmodel = new \models\Map();
-        $sections = $mapmodel->getAllSections();
-
-        foreach ($technicians as $tech) {
-            $data["color"][$tech["userId"]] = "#e8edee";
-        }
-        while ($section = $sections->fetch_assoc()) {
-            $data["color"][$section["tech_id"]] = $section["color"];
-        }
-
-
-        //  $data['technicians'] =
-
-
-
-
-
-        return $data;
-    }
 
 
     public function RepairHistory()
@@ -82,7 +56,7 @@ class Clerck extends Framework
         $repairmodel = new \models\Repair();
         $totalpages = $repairmodel->getRepairHistoryCount($searchfilter);
 
-        $p = new Pagination(5, $totalpages);
+        $p = new Pagination(8, $totalpages);
         $repairs = $repairmodel->getRepairHistory( $p->fiteringText(), $searchfilter);
         $data['repairs'] = $repairs;
         $data['pagination'] = $p;
@@ -132,7 +106,7 @@ class Clerck extends Framework
         $samodel = new \models\StockAddition();
 
         $totalpages = $samodel->get_SA_ListAll_Count($searchfilter);
-        $p = new Pagination(5, $totalpages);
+        $p = new Pagination(10, $totalpages);
         $data['StockAdditionList'] = $samodel->get_SA_ListAll($p->fiteringText(), $searchfilter);
         // $this->session->sendMessage("helooo",'success');
         $data['pagination'] = $p;

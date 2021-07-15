@@ -10,7 +10,7 @@ class ItemRequest extends Database
 
     public function getItemsfor_ItemRequest_byId($ir_id)
     {
-        $q = "SELECT itemrequest_inventory_asc.Item_id, itemrequest_inventory_asc.quantity, inventory.name
+        $q = "SELECT itemrequest_inventory_asc.Item_id, itemrequest_inventory_asc.quantity, inventory.name,itemrequest_inventory_asc.supplied
          FROM `itemrequest_inventory_asc` INNER JOIN `inventory`
          ON itemrequest_inventory_asc.Item_id=inventory.Item_id 
          WHERE `Itemrequest_id`='$ir_id' ";

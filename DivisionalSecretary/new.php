@@ -46,16 +46,16 @@ $data =  $admin->SystemOverview();
        
        
     <main class="admin__main">
-        <div class="dashboard2">
+        <div class="dashboard1">
             <!-- area chart -->
-            <div class="dashboard__item dashboard__item--full">
+            <div class="dashboard__item">
                 <div class="card">
                     <div class="card__header">
                         <i class="fa fa-area-chart"></i> Complaints last month
                     </div>
                     <div class="card__content">
                         <div class="card__item">
-                            <canvas id="myAreaChart" width="100%" height="20"></canvas>
+                            <canvas id="myAreaChart" width="100%" height="35"></canvas>
                         </div>
                     </div>
                 </div>
@@ -64,11 +64,11 @@ $data =  $admin->SystemOverview();
             <div class="dashboard__item dashboard__item--col">
                 <div class="card">
                     <div class="card__header">
-                        <i class="fa fa-pie-chart"></i>  Repair vs Suspicious activities
+                        <i class="fa fa-pie-chart"></i>  Disk usage
                     </div>
                     <div class="card__content">
                         <div class="card__item">
-                              <canvas id="myPieChart" width="100%" height="40"></canvas>
+                              <canvas id="myPieChart" width="100%" height="70"></canvas>
                         </div>
                     </div>
                 </div>
@@ -76,6 +76,8 @@ $data =  $admin->SystemOverview();
             <!-- bar -->
            
 
+            </div>
+            <div class="dashboard2">
 
             <div class="dashboard__item dashboard__item--col">
                 <div class="card">
@@ -90,28 +92,26 @@ $data =  $admin->SystemOverview();
                     </div>
                 </div>
             </div>
-            <!-- <div class="dashboard__item dashboard__item--col">
+            <div class="dashboard__item dashboard__item--col">
                 <div class="card">
                     <div class="card__header">
                         Card
                     </div>
                     <div class="card__content">
                         <div class="card__item">
-
-                          <div class="text-muted">Days worked</div>
-                          <h3 class="text-primary">43</h3>
-                          <hr>
-                          <div class="text-muted">No. of repairs done</div>
-                          <h3 class="text-primary"><?= $data['normcount'] ?></h3>
-
-                          <hr>
-                          <div class="text-muted">Suspicious activities</div>
-                          <h3 style="color: #dc3545;"><?= $data['suscount'] ?></h3>
+                        <div class="h4 mb-0 text-primary">$34,693</div>
+                  <div class="small text-muted">YTD Revenue</div>
+                  <hr>
+                  <div class="h4 mb-0 text-warning">$18,474</div>
+                  <div class="small text-muted">YTD Expenses</div>
+                  <hr>
+                  <div class="h4 mb-0 text-success">$16,219</div>
+                  <div class="small text-muted">YTD Margin</div>
                         </div>
                     </div>
                 </div>
-            </div> -->
-          
+            </div>
+            
        
             <div class="dashboard__item dashboard__item--full">
                 <div class="card">
@@ -163,7 +163,18 @@ $data =  $admin->SystemOverview();
                     </div>
                 </div>
             </div>
-          
+            <div class="dashboard__item dashboard__item--full">
+                <div class="card">
+                    <div class="card__header">
+                        Card full width
+                    </div>
+                    <div class="card__content">
+                        <div class="card__item">
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium labore id culpa sit nisi nostrum, excepturi cumque eos laborum ducimus alias, provident doloribus et facere explicabo ab repudiandae perferendis earum. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima dolore laudantium est, vel illo labore nostrum cupiditate perspiciatis, doloremque sit enim sequi, quasi cumque dolorum voluptate! Aliquam corrupti laboriosam nostrum. Lorem, ipsum dolor sit amet consectetur adipisicing elit. Assumenda cupiditate porro dolores optio dicta tempora quas, culpa itaque, unde recusandae tempore. Voluptas quia perferendis est veritatis nobis, iusto voluptate dolor?
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
  
@@ -325,7 +336,7 @@ piedata =  [<?=$data['normcount'].','.$data['suscount'] ?> ];
 var myPieChart = new Chart(ctx, {
   type: 'pie',
   data: {
-    labels: ["Normal Repairs", "Suspicious Activities"],
+    labels: ["Normal Repairs", "Suspicious Repairs"],
     datasets: [{
       data: piedata,
       backgroundColor: ['#007bff', '#dc3545'],

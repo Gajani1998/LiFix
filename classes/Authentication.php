@@ -111,6 +111,11 @@ class Authentication extends Framework
                 return;
             }
 
+            if (strlen($pass) < 6) {
+                $this->session->sendMessage("Password is weak", "danger");
+                return;
+            }
+
             if ($pass != $confirmpass) {
                 $this->session->sendMessage("Passwords does not match", "danger");
                 return;
@@ -136,7 +141,11 @@ class Authentication extends Framework
             $rolemodel = new \models\Role();
 
             if ($rolemodel->addRole($user_id,$role)) {
-            
+                if($role == TechnicianFL){
+                    $invmnager = new InventoryManager();
+                    $invmnager->AddTmpInventoryfortech($user_id);
+
+                }
 
                  // send notification to clerck to confirm
                 $noti = new \models\Notification();

@@ -17,10 +17,13 @@ $data = $storekeeper->Index();
 	<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon/favicon-32x32.png">
 	<link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon/favicon-16x16.png">
 	<link rel="manifest" href="../assets/favicon/site.webmanifest">
-    <link rel="stylesheet" href="../css/slider.css">
+    <link rel="stylesheet" href="../css/slider.css"> 
+   <!-- <link rel="stylesheet" href="../css/new.css"> -->
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/st/store.css">
-    <link rel="stylesheet" href="../css/itemList.css">
+    <!--<link rel="stylesheet" href="../css/itemList.css"> -->
+    <link rel="stylesheet" href="../css/new.css">
+
     <script src="https://kit.fontawesome.com/2b554022ef.js" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
@@ -57,8 +60,8 @@ $data = $storekeeper->Index();
                     <div id="<?= $row['Itemrequest_id'] ?>" class="repair-item">
                         <div class="row">
                             <span>Date: <?= $row['added_date'] ?></span>
-                            <span>Technician: <?= $row['username'] ?></span>
-                            <i class="s fas fa-check"></i>
+                            <span>Technician: <?= $row['Name'] ?></span>
+                            <!-- <i class="s fas fa-check"></i> -->
                         </div>
                     </div>
 
